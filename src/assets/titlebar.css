@@ -1,0 +1,26 @@
+.titlebar {
+    font-size: 13px !important;
+    font-family: Arial, Helvetica, sans-serif !important;
+    height: 30px !important;
+    padding-top: 3px !important;
+}
+/*.menubar-menu-container {*/
+/*    background-color: var(--v-primary-base) !important;*/
+/*    color: var(--v-primaryText-base) !important;*/
+/*    border-color: rgba(255, 255, 255, 0.12) !important;*/
+/*}*/
+/*.menu-item{*/
+/*    background-color: var(--v-primary-base) !important;*/
+/*    color: var(--v-primaryText-base) !important;*/
+/*    border-color: rgba(255, 255, 255, 0.12) !important;*/
+/*}*/
+/*.window-icon{*/
+/*    background-color: var(--v-primaryText-base) !important;*/
+/*}*/
+/*.window-title {*/
+/*    margin-left: 30px !important;*/
+/*}*/
+
+.container-after-titlebar{
+    overflow: hidden !important;
+}
