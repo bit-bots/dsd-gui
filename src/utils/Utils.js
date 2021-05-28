@@ -37,7 +37,7 @@ export default class  Utils{
      * @returns {string}    Local directory separator
      */
     static getDir(){
-        return '\\';
+        return '/';
     }
 
     /**
