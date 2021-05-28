@@ -33,7 +33,7 @@ export default Vue.extend({
     }else{
       this.$router.push({name: 'WelcomeView'});
       // @ts-ignore
-      this.updateTitleBar('WelcomeView');
+      this.updateTitleBar('Welcome');
     }
   },
   computed: {
@@ -50,7 +50,7 @@ export default Vue.extend({
           this.updateTitleBar(File.getFileName(this.projectConfigurationLocal.path));
         }else{
           // @ts-ignore
-          this.updateTitleBar('WelcomeView');
+          this.updateTitleBar('Welcome');
           this.$router.push({name: 'WelcomeView'});
         }
       },

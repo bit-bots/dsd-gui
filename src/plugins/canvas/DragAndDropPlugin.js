@@ -51,22 +51,22 @@ export default class DragAndDropPlugin{
         }
     }
     removeElements(){
-        const historyStates = [];
+        let historyStates = [];
         const elementsToRemove = this._groupingPlugin.unselectAll()
         if(elementsToRemove.length > 0){
             elementsToRemove.forEach(element => {
                 if(!element.hasName('ENTRY')){
-                    historyStates.concat(this.removeElement(element.id()));
+                    historyStates = historyStates.concat(this.removeElement(element.id()));
                 }
             });
             this._layer.draw();
-            //const removedConnectionsHistory = this._connectionPlugin.clearConnections();
-            //historyStates = historyStates.concat(removedConnectionsHistory);
+            const removedConnectionsHistory = this._connectionPlugin.clearConnections();
+            historyStates = historyStates.concat(removedConnectionsHistory);
             return historyStates;
         }
         return undefined;
     }
-    removeElement(uuid){
+    removeElement(uuid, removeConnections){
         // eslint-disable-next-line @typescript-eslint/no-this-alias
         const self = this;
         const element = self._layer.findOne(node => {
@@ -77,9 +77,12 @@ export default class DragAndDropPlugin{
         const hirsotryState = new HistoryStateElement(self.removeElement.bind(self),uuid,self.createElement.bind(self),node)
         element.destroy();
         self._layer.draw();
-        const removedConnectionsHistory = this._connectionPlugin.clearConnections();
-        self._layer.draw();
-        return [hirsotryState].concat(removedConnectionsHistory);
+        if(removeConnections){
+            const removedConnectionsHistory = this._connectionPlugin.clearConnections();
+            self._layer.draw();
+            return [hirsotryState].concat(removedConnectionsHistory);
+        }
+        return [hirsotryState];
     }
     createSubtree(customItem){
         const historyStates = this.removeElements();
@@ -131,13 +134,14 @@ export default class DragAndDropPlugin{
                 beforeNode = EditorUtils.castNode(element);
                 updatedElement.customAttr = attrs.customAttr;
             }
-            this.removeElement(updatedElement.customItem.uuid + '$' + updatedElement.uuid1);
+            this.removeElement(updatedElement.customItem.uuid + '$' + updatedElement.uuid1, false);
             this._layer.draw();
             this.createElement(updatedElement)
             this._layer.draw();
         })
         this._connectionPlugin.updateConnectionRefs(attrs.customItem);
         this._layer.draw();
+        this._connectionPlugin.redrawAllConnections();
         for(let i = 0; i < beforeNode.customItem.outputs.length; i++){
             const correspondendingOutput = attrs.customItem.outputs.filter( o => o.before === beforeNode.customItem.outputs[i].name);
             if(correspondendingOutput && correspondendingOutput.length > 0){

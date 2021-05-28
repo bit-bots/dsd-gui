@@ -123,7 +123,7 @@ export default class ProjectTreeHandler{
         if(file.isDirectory){
             treeElement.children = this.loadAllElements(treeElement.object.path, extractClasses);
             return treeElement;
-        }else if(!IGNORED_FILES.includes(file.fileName) && extractClasses){
+        }else if(!IGNORED_FILES.includes(file.name) && extractClasses){
             treeElement.children = this.loadElementInfos(treeElement);
             return treeElement;
         }

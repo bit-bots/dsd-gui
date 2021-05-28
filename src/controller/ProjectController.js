@@ -212,6 +212,7 @@ export default class ProjectController{
         }
 
         for(let i = 0 ; i < savedInstances.length; i++){
+            console.log(savedInstances[i])
             let regex = undefined;
             if(savedInstances[i].isBehaviorTree){
                 regex = /\n-->(.*(?:\r?\n(?!\r?\n).*)*)/g;

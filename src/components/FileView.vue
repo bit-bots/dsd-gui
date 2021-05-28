@@ -150,6 +150,11 @@ export default {
       }
       this.checkChanges();
       this.clearUnassasaryFiles();
+      if(this.$store.state.theme.darkMode){
+        this.editor.setOption('theme', 'dracula');
+      }else{
+        this.editor.setOption('theme', 'defalut');
+      }
     },
     'projectControllerRef.tabs': function(){
       this.temporarySaveFile();

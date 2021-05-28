@@ -61,6 +61,7 @@ export default {
           if(!dsdBlock.complete){
             messages.push('Unused outputs in ' + snapShot.name);
           }
+          dsdBlock.name = instance.item.name;
           updatedDsdBlocks.push(dsdBlock);
           graphConfigs[instanceId] = snapShot;
           snapShot.nodes.forEach(node => {

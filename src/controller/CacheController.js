@@ -63,9 +63,11 @@ export default class CacheController{
         return response;
     }
     static removeFromRecentProjects(id){
+        console.log(id);
         if(id){
             let tempRecentProjectIds = this.getRecentProjectIds();
-            tempRecentProjectIds = tempRecentProjectIds.filter(o => o.id !== id);
+            console.log(tempRecentProjectIds)
+            tempRecentProjectIds = tempRecentProjectIds.filter(o => o !== id);
             if(tempRecentProjectIds){
                 store.set('recentProjectIds', tempRecentProjectIds);
             }else{

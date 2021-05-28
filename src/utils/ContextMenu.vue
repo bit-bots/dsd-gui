@@ -81,15 +81,15 @@ export default {
     updateContextMenu(){
       const canvasMenu = [
         {
+          name: 'Open',
+          innerAction: 'OPEN_ELEMENT',
+          disabled: false,
+        },
+        {
           name: 'Edit Properties',
           innerAction: 'EDIT_PROPERTIES',
           icon: 'mdi-pencil',
           disabled: false
-        },
-        {
-          name: 'Open',
-          innerAction: 'OPEN_ELEMENT',
-          disabled: false,
         },
         {name: 'DIVIDER'},
         {
@@ -126,12 +126,12 @@ export default {
 
       const treeViewMenu= [
         {
-          name: 'New Subtree',
-          innerAction: 'NEW_SUBTREE'
-        },
-        {
           name: 'Open',
           innerAction: 'OPEN_FILE'
+        },
+        {
+          name: 'New Subtree',
+          innerAction: 'NEW_SUBTREE'
         },
         // {
         //   name: 'DIVIDER',

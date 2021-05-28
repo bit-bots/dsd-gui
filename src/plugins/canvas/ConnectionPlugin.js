@@ -176,6 +176,7 @@ export default class ConnectionPlugin {
         })
     }
     updateConnectionRefs(outputWithBeforeNames){
+        console.log(outputWithBeforeNames);
         this._connections.forEach(line => {
             line.from = this._layer.findOne('#' + line.fromId);
             line.to = this._layer.findOne('#' + line.toId);

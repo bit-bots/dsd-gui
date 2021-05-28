@@ -104,11 +104,13 @@ export default class Editor{
     }
     createSubtree(customItem){
         const removedNodes = this._dragAndDropPlugin.createSubtree(customItem);
+        console.log(removedNodes)
         const instance = new Instance();
         instance.nodes = removedNodes.filter(o => o.customItem);
         instance.connections = removedNodes.filter( o=> o.fromId);
         instance.isBehaviorTree = false;
         instance.name = customItem.name;
+        console.log(instance)
         const entryCustomItem = JSON.parse(JSON.stringify(customItem));
         entryCustomItem.type = ELEMENT_TYPE.ENTRY;
         entryCustomItem.outputs = [new Output()]
@@ -153,6 +155,8 @@ export default class Editor{
         this._stage.height(dimension.height);
     }
     updateElement(customItem, customAttributes, node){
+        console.log(customItem);
+        console.log(node);
         this._dragAndDropPlugin.updateElement( customItem, customAttributes, node);
     }
 

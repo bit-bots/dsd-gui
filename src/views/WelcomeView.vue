@@ -13,7 +13,7 @@
             </div>
           </v-col>
           <v-col cols="12">
-            <div class="headline text-h6 text--white textColor align-center justify-center">Version 1.0.0</div>
+            <div class="headline text-h6 text--white textColor align-center justify-center">Version 1.0.1</div>
           </v-col>
         </v-row>
       </div>

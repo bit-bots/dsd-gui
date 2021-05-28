@@ -7,7 +7,7 @@ export default class RestructurePlugin {
     restructure(entryNode, connections){
         this._connections = connections;
         const element = this.findElementByNode(entryNode);
-        this.setNewElementPosition(element, {x:200,y:400});
+        this.setNewElementPosition(element, {x:10,y:20});
     }
 
     setNewElementPosition(element, corrdiantes){
