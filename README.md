@@ -30,6 +30,10 @@ npm run electron:build
 ```
 ## How to use
 These sections describe the basic functions of the program as well as its limitations.
+Start with running:
+```
+./dist_electro/DSDUI-1.0.1.AppImage
+```
 ### Getting started
 - Load Project: If you want to load a DSD, make sure that the folder structure of the DSD looks like following:
 ```
