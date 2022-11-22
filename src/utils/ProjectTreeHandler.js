@@ -34,17 +34,18 @@ export default class ProjectTreeHandler{
         topLayerFilePaths.push(localConfig.path + Utils.getDir() + config.behaviorModuleName);
         topLayerFilePaths.push(localConfig.path + Utils.getDir() + config.dsdFileName);
         topLayerFilePaths.push(localConfig.blackboardPath);
-        topLayerFilePaths.forEach(path => {
-            if(!path || !FileController.existFile(path)) {
-                return;
-            }
-            const file = FileController.fileInfo(path);
-            const treeElement = this.createTreeElementByFile(file);
-            if(treeElement.type === TREE_TYPE.DIRECTORY){
-                treeElement.children = this.loadAllElements(treeElement.object.path, treeElement.object.path !== localConfig.path);
-            }
-            projectTree.push(treeElement);
-        })
+        const treeElements = topLayerFilePaths
+            .filter(path => path && FileController.existFile(path) && !path.includes("__pycache__"))
+            .map(path => FileController.fileInfo(path))
+            .map(file => {
+                const treeElement = this.createTreeElementByFile(file);
+                if(treeElement.type === TREE_TYPE.DIRECTORY){
+                    treeElement.children = this.loadAllElements(treeElement.object.path, treeElement.object.path !== localConfig.path);
+                }
+                return treeElement;
+            });
+        projectTree.push(...treeElements);
+
         // Loading the virtuell Folder for Subtrees
         const subtreeFolderFile = new File(localConfig.path + Utils.getDir() + 'subtrees', 'subtrees', '', true)     // need to be create manuale because it does not exist in reality
         const subtreeTreeElement = this.createTreeElementByFile(subtreeFolderFile);
