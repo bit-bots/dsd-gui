@@ -26,15 +26,6 @@ export default Vue.extend({
     self.initializeTitleBar();
     window.addEventListener('resize', () => {self.resize()})
     self.resize();
-    if(this.projectConfigurationLocal){
-      // @ts-ignore
-      this.updateTitleBar(File.getFileName(this.projectConfigurationLocal.path));
-      this.$router.push({name: 'ProjectView'});
-    }else{
-      this.$router.push({name: 'WelcomeView'});
-      // @ts-ignore
-      this.updateTitleBar('Welcome');
-    }
   },
   computed: {
     projectConfigurationLocal(): ProjectConfigurationLocal{
