@@ -2,7 +2,6 @@ import Vue from "vue";
 import Vuex from "vuex";
 import CacheController from "@/controller/CacheController";
 import ProjectController from "@/controller/ProjectController";
-import ProjectConfiguration from "@/entities/ProjectConfiguration";
 
 Vue.use(Vuex);
 
@@ -15,7 +14,7 @@ export default new Vuex.Store({
     },
   },
   mutations: {
-    resetGraphConfig(state, payload) {
+    resetGraphConfig(state) {
       // @ts-ignore
       state.projectConfiguration.graphConfig = {};
     },

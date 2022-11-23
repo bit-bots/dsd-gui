@@ -154,7 +154,6 @@
 
 <script>
 import SettingsDialog from "@/components/dialogs/settings/SettingsDialog";
-import CacheController from "@/controller/CacheController";
 import OpenProjectDialog from "@/components/dialogs/OpenProjectDialog";
 export default {
   name: "Actionbar",

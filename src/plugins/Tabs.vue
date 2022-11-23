@@ -222,12 +222,12 @@ export default {
       const x = (tabWidth - gap * 2) * i;
       tab._x = x;
       tab._instance.setPosition(x, 0);
-      tab._instance.on("pointerDown", (e, pointer) => this.handlePointerDown(e, tab, i));
+      tab._instance.on("pointerDown", (e) => this.handlePointerDown(e, tab, i));
       tab._instance.on("dragMove", (e, pointer, moveVector) =>
         this.handleDragMove(e, moveVector, tab, i)
       );
-      tab._instance.on("dragEnd", (e, pointer) => this.handleDragEnd(e, tab, i));
-      tab._instance.on("staticClick", (e, pointer) => this.handleClick(e, tab, i));
+      tab._instance.on("dragEnd", (e) => this.handleDragEnd(e, tab, i));
+      tab._instance.on("staticClick", (e) => this.handleClick(e, tab, i));
     },
     addTab(...tabs) {
       const { insertToAfter, value, tabKey } = this;
@@ -295,7 +295,7 @@ export default {
         this.doLayout();
       });
     },
-    handleResize(e) {
+    handleResize() {
       this.timer && clearTimeout(this.timer);
       this.timer = setTimeout(() => {
         this.doLayout();

@@ -31,8 +31,6 @@ import TreeElement from "@/entities/TreeElement";
 import { TREE_TYPE } from "@/enumerates/TreeType";
 import { ELEMENT_TYPE } from "@/enumerates/ElementType";
 import NewSubtreeDialog from "@/components/dialogs/NewSubtreeDialog";
-// eslint-disable-next-line @typescript-eslint/no-this-alias
-const self = this;
 export default {
   name: "ContextMenu",
   components: { NewSubtreeDialog, ContextMenuList },

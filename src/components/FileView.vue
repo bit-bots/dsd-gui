@@ -44,7 +44,7 @@ export default {
       this.scrollTo(null, (coords.top + coords.bottom - h) / 2);
     });
     this.$emit("ref", this.editor);
-    this.editor.on("change", (e) => {
+    this.editor.on("change", () => {
       this.checkChanges();
     });
   },

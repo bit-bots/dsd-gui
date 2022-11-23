@@ -158,7 +158,6 @@
 import CacheController from "@/controller/CacheController";
 import File from "@/entities/File";
 import FileController from "@/controller/FileController";
-import ProjectController from "@/controller/ProjectController";
 const { remote } = require("electron");
 export default {
   name: "ProjectSettings",
