@@ -42,338 +42,344 @@
 </template>
 
 <script>
-import Draggabilly from 'draggabilly'
-import RenderTemp from './render-temp'
+import Draggabilly from "draggabilly";
+import RenderTemp from "./render-temp";
 
 const getInstanceAt = (tabs, tab, tabWidth, tabKey, gap) => {
-  const halfWidth = (tabWidth - gap) / 2
-  const x = tab._instance.position.x
+  const halfWidth = (tabWidth - gap) / 2;
+  const x = tab._instance.position.x;
   for (let i = 0; i < tabs.length; i++) {
-    const targetX = tabs[i]._x - 1
+    const targetX = tabs[i]._x - 1;
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
-    if (getKey(tab, tabKey) === getKey(tabs[i], tabKey)) continue
+    if (getKey(tab, tabKey) === getKey(tabs[i], tabKey)) continue;
     // in range
     if (targetX <= x && x < targetX + halfWidth / 2) {
       // before range
       return {
-        direction: 'left',
+        direction: "left",
         instance: tabs[i]._instance,
-        targetTab: tabs[i]
-      }
+        targetTab: tabs[i],
+      };
     } else if (targetX + halfWidth / 2 <= x && x < targetX + halfWidth) {
       // after range
       return {
-        direction: 'right',
+        direction: "right",
         instance: tabs[i]._instance,
-        targetTab: tabs[i]
-      }
+        targetTab: tabs[i],
+      };
     }
   }
   return {
     direction: null,
     instance: null,
-    targetTab: tab
-  }
-}
+    targetTab: tab,
+  };
+};
 
 const getParams = (tab, keyStr) => {
-  const keys = keyStr.split('.')
-  let label = tab
-  keys.forEach(key => {
-    label = label[key]
-  })
-  return label
-}
+  const keys = keyStr.split(".");
+  let label = tab;
+  keys.forEach((key) => {
+    label = label[key];
+  });
+  return label;
+};
 
 const getKey = (tab, tabKey) => {
-  return getParams(tab, tabKey)
-}
+  return getParams(tab, tabKey);
+};
 
 export default {
-  name: 'tabs',
+  name: "tabs",
   components: {
-    RenderTemp
+    RenderTemp,
   },
   props: {
     value: {
       type: [String, Number],
-      default: ''
+      default: "",
     },
     tabs: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     props: {
       type: Object,
       default: () => {
-        return {}
-      }
+        return {};
+      },
     },
     minWidth: {
       type: Number,
-      default: 40
+      default: 40,
     },
     autoHiddenCloseIconWidth: {
       type: Number,
-      default: 120
+      default: 120,
     },
     maxWidth: {
       type: Number,
-      default: 245
+      default: 245,
     },
     gap: {
       type: Number,
-      default: 7
+      default: 7,
     },
     insertToAfter: {
       type: Boolean,
-      default: false
+      default: false,
     },
     theme: {
       type: String,
-      default: ''
+      default: "",
     },
     isMousedownActive: {
       type: Boolean,
-      default: true
+      default: true,
     },
     renderLabel: {
-      type: Function
+      type: Function,
     },
     onClose: {
-      type: Function
-    }
+      type: Function,
+    },
   },
-  data () {
+  data() {
     return {
-      tabWidth: null
-    }
+      tabWidth: null,
+    };
   },
   filters: {
-    tabLabelText (tab, tabLabel = '', renderLabel) {
-      return renderLabel ? renderLabel(tab) : getParams(tab, tabLabel)
-    }
+    tabLabelText(tab, tabLabel = "", renderLabel) {
+      return renderLabel ? renderLabel(tab) : getParams(tab, tabLabel);
+    },
   },
   computed: {
-    tabKey () {
-      return this.props.key || 'key'
+    tabKey() {
+      return this.props.key || "key";
     },
-    tabLabel () {
-      return this.props.label || 'label'
-    }
+    tabLabel() {
+      return this.props.label || "label";
+    },
   },
-  mounted () {
-    this.calcTabWidth()
-    window.addEventListener('resize', this.handleResize)
-    this.setup()
+  mounted() {
+    this.calcTabWidth();
+    window.addEventListener("resize", this.handleResize);
+    this.setup();
   },
-  destroyed () {
-    window.removeEventListener('resize', this.handleResize)
+  destroyed() {
+    window.removeEventListener("resize", this.handleResize);
   },
   methods: {
-    canShowTabClose (tab) {
+    canShowTabClose(tab) {
       if (tab.closable === false) {
-        return false
+        return false;
       }
 
       if (tab[this.tabKey] === this.value) {
-        return true
+        return true;
       }
 
       if (this.autoHiddenCloseIconWidth > this.tabWidth) {
-        return false
+        return false;
       }
 
-      return true
+      return true;
     },
-    calcTabWidth () {
-      const { tabs, maxWidth, minWidth, gap } = this
-      const $content = this.$refs.content
-      const after = this.$refs.after
-      const afterWidth = after.getBoundingClientRect().width
-      if (!$content) return Math.max(maxWidth, minWidth)
-      const contentWidth = $content.clientWidth - gap * 3 - afterWidth
-      let width = contentWidth / tabs.length
-      width += gap * 2
-      if (width > maxWidth) width = maxWidth
-      if (width < minWidth) width = minWidth
-      this.tabWidth = width
+    calcTabWidth() {
+      const { tabs, maxWidth, minWidth, gap } = this;
+      const $content = this.$refs.content;
+      const after = this.$refs.after;
+      const afterWidth = after.getBoundingClientRect().width;
+      if (!$content) return Math.max(maxWidth, minWidth);
+      const contentWidth = $content.clientWidth - gap * 3 - afterWidth;
+      let width = contentWidth / tabs.length;
+      width += gap * 2;
+      if (width > maxWidth) width = maxWidth;
+      if (width < minWidth) width = minWidth;
+      this.tabWidth = width;
     },
-    setup () {
-      const { tabs } = this
+    setup() {
+      const { tabs } = this;
       tabs.forEach((tab, i) => {
-        this.addInstance(tab, i)
-      })
+        this.addInstance(tab, i);
+      });
     },
-    addInstance (tab, i) {
-      const { tabWidth, tabKey, gap } = this
+    addInstance(tab, i) {
+      const { tabWidth, tabKey, gap } = this;
       if (tab._instance) {
-        tab._instance.setPosition(tab._x, 0)
-        return
+        tab._instance.setPosition(tab._x, 0);
+        return;
       }
-      const $content = this.$refs.content
-      const $item = this.$refs.item
-      const $el = $item.find(el => el.classList.contains(`tab-${getKey(tab, tabKey)}`))
-      tab._instance = new Draggabilly($el, { axis: 'x', containment: $content, handle: '.tabs-main' })
-      const x = (tabWidth - gap * 2) * i
-      tab._x = x
-      tab._instance.setPosition(x, 0)
-      tab._instance.on('pointerDown', (e, pointer) => this.handlePointerDown(e, tab, i))
-      tab._instance.on('dragMove', (e, pointer, moveVector) => this.handleDragMove(e, moveVector, tab, i))
-      tab._instance.on('dragEnd', (e, pointer) => this.handleDragEnd(e, tab, i))
-      tab._instance.on('staticClick', (e, pointer) => this.handleClick(e, tab, i))
+      const $content = this.$refs.content;
+      const $item = this.$refs.item;
+      const $el = $item.find((el) => el.classList.contains(`tab-${getKey(tab, tabKey)}`));
+      tab._instance = new Draggabilly($el, {
+        axis: "x",
+        containment: $content,
+        handle: ".tabs-main",
+      });
+      const x = (tabWidth - gap * 2) * i;
+      tab._x = x;
+      tab._instance.setPosition(x, 0);
+      tab._instance.on("pointerDown", (e, pointer) => this.handlePointerDown(e, tab, i));
+      tab._instance.on("dragMove", (e, pointer, moveVector) =>
+        this.handleDragMove(e, moveVector, tab, i)
+      );
+      tab._instance.on("dragEnd", (e, pointer) => this.handleDragEnd(e, tab, i));
+      tab._instance.on("staticClick", (e, pointer) => this.handleClick(e, tab, i));
     },
-    addTab (...tabs) {
-      const { insertToAfter, value, tabKey } = this
+    addTab(...tabs) {
+      const { insertToAfter, value, tabKey } = this;
       if (insertToAfter) {
-        const i = this.tabs.findIndex(tab => getKey(tab, tabKey) === value)
-        this.tabs.splice(i + 1, 0, ...tabs)
+        const i = this.tabs.findIndex((tab) => getKey(tab, tabKey) === value);
+        this.tabs.splice(i + 1, 0, ...tabs);
       } else {
-        this.tabs.push(...tabs)
+        this.tabs.push(...tabs);
       }
       this.$nextTick(() => {
-        this.setup()
-        this.doLayout()
-      })
+        this.setup();
+        this.doLayout();
+      });
     },
-    removeTab (key) {
-      const { tabKey, tabs } = this
-      let index = -1
-      let targetTab = null
-      if (typeof tab === 'number') {
-        index = key
-        targetTab = this.tabs[index]
+    removeTab(key) {
+      const { tabKey, tabs } = this;
+      let index = -1;
+      let targetTab = null;
+      if (typeof tab === "number") {
+        index = key;
+        targetTab = this.tabs[index];
       } else {
         tabs.forEach((tab, i) => {
           if (getKey(tab, tabKey) === key) {
-            index = i
-            targetTab = tab
+            index = i;
+            targetTab = tab;
           }
-        })
+        });
       }
       if (index >= 0 && targetTab) {
-        this.handleDelete(targetTab, index)
+        this.handleDelete(targetTab, index);
       }
     },
-    doLayout () {
-      this.calcTabWidth()
-      const { tabWidth, tabs, gap } = this
+    doLayout() {
+      this.calcTabWidth();
+      const { tabWidth, tabs, gap } = this;
       tabs.forEach((tab, i) => {
-        const instance = tab._instance
-        const _x = (tabWidth - gap * 2) * i
-        tab._x = _x
-        instance.setPosition(_x, 0)
-      })
+        const instance = tab._instance;
+        const _x = (tabWidth - gap * 2) * i;
+        tab._x = _x;
+        instance.setPosition(_x, 0);
+      });
     },
-    handleDelete (tab, i) {
-      if (typeof this.onClose === 'function' && !this.onClose(tab, tab[this.tabKey], i)) {
-        return false
+    handleDelete(tab, i) {
+      if (typeof this.onClose === "function" && !this.onClose(tab, tab[this.tabKey], i)) {
+        return false;
       }
-      const { tabKey, tabs, value } = this
-      const index = tabs.findIndex(item => getKey(item, tabKey) === value)
-      let after, before
+      const { tabKey, tabs, value } = this;
+      const index = tabs.findIndex((item) => getKey(item, tabKey) === value);
+      let after, before;
       if (i === index) {
-        after = tabs[i + 1]
-        before = tabs[i - 1]
+        after = tabs[i + 1];
+        before = tabs[i - 1];
       }
       if (after) {
-        this.$emit('input', getKey(after, tabKey))
+        this.$emit("input", getKey(after, tabKey));
       } else if (before) {
-        this.$emit('input', getKey(before, tabKey))
+        this.$emit("input", getKey(before, tabKey));
       } else if (tabs.length <= 1) {
-        this.$emit('input', null)
+        this.$emit("input", null);
       }
-      tabs.splice(i, 1)
-      this.$emit('remove', tab, i)
+      tabs.splice(i, 1);
+      this.$emit("remove", tab, i);
       this.$nextTick(() => {
-        this.doLayout()
-      })
+        this.doLayout();
+      });
     },
-    handleResize (e) {
-      this.timer && clearTimeout(this.timer)
+    handleResize(e) {
+      this.timer && clearTimeout(this.timer);
       this.timer = setTimeout(() => {
-        this.doLayout()
-      }, 100)
+        this.doLayout();
+      }, 100);
     },
-    handlePointerDown (e, tab, i) {
-      const { tabKey, isMousedownActive } = this
-      isMousedownActive && this.$emit('input', getKey(tab, tabKey))
-      this.$emit('dragstart', e, tab, i)
+    handlePointerDown(e, tab, i) {
+      const { tabKey, isMousedownActive } = this;
+      isMousedownActive && this.$emit("input", getKey(tab, tabKey));
+      this.$emit("dragstart", e, tab, i);
     },
-    handleDragMove (e, moveVector, tab, i) {
-      const { tabWidth, tabs, tabKey, gap } = this
-      const { instance, targetTab } = getInstanceAt(tabs, tab, tabWidth, tabKey, gap)
+    handleDragMove(e, moveVector, tab, i) {
+      const { tabWidth, tabs, tabKey, gap } = this;
+      const { instance, targetTab } = getInstanceAt(tabs, tab, tabWidth, tabKey, gap);
       if (instance) {
-        this.swapTab(tab, targetTab)
+        this.swapTab(tab, targetTab);
       }
-      this.$emit('dragging', e, targetTab, i)
+      this.$emit("dragging", e, targetTab, i);
     },
-    handleDragEnd (e, tab) {
-      const _instance = tab._instance
-      if (_instance.position.x === 0) return
+    handleDragEnd(e, tab) {
+      const _instance = tab._instance;
+      if (_instance.position.x === 0) return;
       setTimeout(() => {
-        _instance.element.classList.add('move')
-        _instance.setPosition(tab._x, 0)
-      }, 50)
+        _instance.element.classList.add("move");
+        _instance.setPosition(tab._x, 0);
+      }, 50);
       setTimeout(() => {
-        this.$emit('dragend', e, tab)
-        _instance.element.classList.remove('move')
-      }, 200)
+        this.$emit("dragend", e, tab);
+        _instance.element.classList.remove("move");
+      }, 200);
     },
-    handleClick (e, tab, index) {
-      this.$emit('click', e, tab, index)
+    handleClick(e, tab, index) {
+      this.$emit("click", e, tab, index);
     },
-    handleMenu (e, tab, index) {
-      this.$emit('contextmenu', e, tab, index)
+    handleMenu(e, tab, index) {
+      this.$emit("contextmenu", e, tab, index);
     },
-    swapTab (tab, targetTab) {
-      const { tabKey, tabs } = this
-      let index, targetIndex
+    swapTab(tab, targetTab) {
+      const { tabKey, tabs } = this;
+      let index, targetIndex;
       for (let i = 0; i < tabs.length; i++) {
         if (getKey(tab, tabKey) === getKey(tabs[i], tabKey)) {
-          index = i
+          index = i;
         }
         if (getKey(targetTab, tabKey) === getKey(tabs[i], tabKey)) {
-          targetIndex = i
+          targetIndex = i;
         }
       }
       if (index !== targetIndex) {
-        [tabs[index], tabs[targetIndex]] = [tabs[targetIndex], tabs[index]]
+        [tabs[index], tabs[targetIndex]] = [tabs[targetIndex], tabs[index]];
       }
       // swap x
-      const _x = tab._x
-      tab._x = targetTab._x
-      targetTab._x = _x
+      const _x = tab._x;
+      tab._x = targetTab._x;
+      targetTab._x = _x;
 
       // swap position
-      const _instance = targetTab._instance
+      const _instance = targetTab._instance;
       setTimeout(() => {
-        _instance.element.classList.add('move')
-        _instance.setPosition(_x, _instance.position.y)
-      }, 50)
+        _instance.element.classList.add("move");
+        _instance.setPosition(_x, _instance.position.y);
+      }, 50);
       setTimeout(() => {
-        _instance.element.classList.remove('move')
-        this.$emit('swap', tab, targetTab)
-      }, 200)
+        _instance.element.classList.remove("move");
+        this.$emit("swap", tab, targetTab);
+      }, 200);
 
       // refresh tabs
-      this.tabs.splice(0, 0)
+      this.tabs.splice(0, 0);
     },
-    getTabs () {
-      return this.tabs.map(tab => {
+    getTabs() {
+      return this.tabs.map((tab) => {
         const item = {
-          ...tab
-        }
-        delete item._instance
-        delete item._x
-        return item
-      })
+          ...tab,
+        };
+        delete item._instance;
+        delete item._x;
+        return item;
+      });
     },
-    getKey (tab) {
-      return getKey(tab, this.tabKey)
-    }
-  }
-}
+    getKey(tab) {
+      return getKey(tab, this.tabKey);
+    },
+  },
+};
 </script>
 
 <style lang="less">
@@ -546,7 +552,7 @@ export default {
     background-color: #fff;
   }
 
-  .tabs-after{
+  .tabs-after {
     top: 50%;
     display: flex;
     position: absolute;

@@ -1,7 +1,12 @@
 <template>
   <div>
-    <div v-if="!disableAdd">Outputs ({{outputs.length}}):</div>
-    <v-list style="height: 150px; margin-left: -4px;" class="overflow-y-auto attrlist" dense outlined>
+    <div v-if="!disableAdd">Outputs ({{ outputs.length }}):</div>
+    <v-list
+      style="height: 150px; margin-left: -4px"
+      class="overflow-y-auto attrlist"
+      dense
+      outlined
+    >
       <draggable :list="outputs">
         <div v-for="(output, index) in outputs" :key="index">
           <v-list-item>
@@ -12,10 +17,20 @@
                     <v-icon class="pt-1 mt-2">mdi-menu</v-icon>
                   </v-col>
                   <v-col cols="11">
-                    <v-text-field background-color="primaryLighten1"
-                                  filled
-                                  solo
-                                  dense flat hide-details  :disabled="disableAdd" v-model="output.name" placeholder="Name"  type="text" class="mr-1 my-1" @input="$emit('change', outputs)"></v-text-field>
+                    <v-text-field
+                      background-color="primaryLighten1"
+                      filled
+                      solo
+                      dense
+                      flat
+                      hide-details
+                      :disabled="disableAdd"
+                      v-model="output.name"
+                      placeholder="Name"
+                      type="text"
+                      class="mr-1 my-1"
+                      @input="$emit('change', outputs)"
+                    ></v-text-field>
                   </v-col>
                 </v-row>
               </v-list-item-title>
@@ -25,9 +40,29 @@
                 <v-col cols="6">
                   <div>
                     <v-hover v-slot="{ hover }">
-                      <v-card width="60" height="40" class="pa-1" style="cursor: pointer;" v-bind:style="{backgroundColor: hover ? 'var(--v-darkPrimary-base)' : 'var(--v-primary-lighten1)'}" outlined @click="openColorDialog(output)">
-                        <div style="width: 100%; height: 100%; border-width: 2px; border-style: solid; border-color: var(--v-darkPrimary-base);" v-bind:style="{backgroundColor : output.color}">
-                        </div>
+                      <v-card
+                        width="60"
+                        height="40"
+                        class="pa-1"
+                        style="cursor: pointer"
+                        v-bind:style="{
+                          backgroundColor: hover
+                            ? 'var(--v-darkPrimary-base)'
+                            : 'var(--v-primary-lighten1)',
+                        }"
+                        outlined
+                        @click="openColorDialog(output)"
+                      >
+                        <div
+                          style="
+                            width: 100%;
+                            height: 100%;
+                            border-width: 2px;
+                            border-style: solid;
+                            border-color: var(--v-darkPrimary-base);
+                          "
+                          v-bind:style="{ backgroundColor: output.color }"
+                        ></div>
                       </v-card>
                     </v-hover>
                   </div>
@@ -38,7 +73,6 @@
                   </v-btn>
                 </v-col>
               </v-row>
-
             </v-list-item-action>
           </v-list-item>
           <v-divider v-if="!disableAdd"></v-divider>
@@ -52,17 +86,22 @@
           </v-btn>
         </v-list-item-content>
       </v-list-item>
-      <color-picker-dialog v-if="selectedOutput" :color="selectedOutput.color" :dialog="showColorDialog" @close="showColorDialog = false" @save="setColor"></color-picker-dialog>
+      <color-picker-dialog
+        v-if="selectedOutput"
+        :color="selectedOutput.color"
+        :dialog="showColorDialog"
+        @close="showColorDialog = false"
+        @save="setColor"
+      ></color-picker-dialog>
     </v-list>
   </div>
-
 </template>
 
 <script>
-import ColorPickerDialog from '@/components/dialogs/ColorPickerDialog';
-import draggable from 'vuedraggable'
+import ColorPickerDialog from "@/components/dialogs/ColorPickerDialog";
+import draggable from "vuedraggable";
 export default {
-  name: 'OutputList',
+  name: "OutputList",
   components: { draggable, ColorPickerDialog },
   props: {
     items: Array,
@@ -70,21 +109,21 @@ export default {
   },
   watch: {
     items: {
-      handler(){
+      handler() {
         this.setOutputs();
-      }
+      },
     },
     outputs: {
-      handler(){
+      handler() {
         this.ignoreChange = true;
-        this.$emit('change', this.outputs);
-      }
-    }
+        this.$emit("change", this.outputs);
+      },
+    },
   },
   mounted() {
     this.setOutputs();
   },
-  data: () =>({
+  data: () => ({
     outputs: [],
     draggedOutputs: [],
     index: 0,
@@ -95,46 +134,44 @@ export default {
     draggingOutput: undefined,
   }),
   methods: {
-    setOutputs(){
-      if(this.items){
-        if(this.ignoreChange){
+    setOutputs() {
+      if (this.items) {
+        if (this.ignoreChange) {
           this.ignoreChange = false;
           return;
         }
         this.outputs = JSON.parse(JSON.stringify(this.items));
-        for(let i = 0; i < this.outputs.length; i++){
-          this.outputs[i].before = this.outputs[i].name
+        for (let i = 0; i < this.outputs.length; i++) {
+          this.outputs[i].before = this.outputs[i].name;
         }
         this.removedOutputs = undefined;
       }
     },
-    openColorDialog(output){
+    openColorDialog(output) {
       this.selectedOutput = output;
       this.showColorDialog = true;
     },
-    removeOutput(output){
-      if(!this.removedOutputs){
+    removeOutput(output) {
+      if (!this.removedOutputs) {
         this.removedOutputs = [output];
-      }else{
+      } else {
         this.removedOutputs.push(output);
       }
-      this.outputs = this.outputs.filter(o => o !== output);
-      this.$emit('change', this.outputs);
-      this.$emit('removed', this.removedOutputs);
+      this.outputs = this.outputs.filter((o) => o !== output);
+      this.$emit("change", this.outputs);
+      this.$emit("removed", this.removedOutputs);
     },
-    setColor(color){
+    setColor(color) {
       const index = this.outputs.indexOf(this.selectedOutput);
       this.outputs[index].color = color;
-      this.$emit('change', this.outputs);
+      this.$emit("change", this.outputs);
     },
-    addOutput(){
-      this.outputs.push({name: '', color:'white'});
-      this.$emit('change', this.outputs);
+    addOutput() {
+      this.outputs.push({ name: "", color: "white" });
+      this.$emit("change", this.outputs);
     },
-  }
+  },
 };
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

@@ -1,8 +1,11 @@
 <template>
-  <v-card light style="width: 100%; min-height: 400px; background-color: var(--v-primary-base);" flat>
+  <v-card
+    light
+    style="width: 100%; min-height: 400px; background-color: var(--v-primary-base)"
+    flat
+  >
     <v-radio-group v-model="dark" row :dark="dark" class="ml-2">
-      <template v-slot:label>
-      </template>
+      <template v-slot:label> </template>
       <v-radio :value="true" color="accent">
         <template v-slot:label>
           <div>
@@ -30,10 +33,10 @@
 </template>
 
 <script>
-import CacheController from '@/controller/CacheController';
+import CacheController from "@/controller/CacheController";
 
 export default {
-  name: 'ThemeSettings',
+  name: "ThemeSettings",
   data: () => ({
     dark: false,
   }),
@@ -42,23 +45,22 @@ export default {
   },
   watch: {
     dark: {
-      handler(){
+      handler() {
         this.$vuetify.theme.dark = this.dark;
-        this.$store.commit('setTheme',
-                           {
-                             darkMode: this.dark
-                           });
+        this.$store.commit("setTheme", {
+          darkMode: this.dark,
+        });
         CacheController.setTheme({
-                                   darkMode: this.dark
-                                 });
-      }
-    }
+          darkMode: this.dark,
+        });
+      },
+    },
   },
 };
 </script>
 
 <style>
-.mdi-radiobox-marked{
+.mdi-radiobox-marked {
   color: var(--v-accent-base) !important;
 }
 </style>
