@@ -14,7 +14,6 @@ import { ELEMENT_TYPE } from "@/enumerates/ElementType";
 import Utils from "@/utils/Utils";
 import FileController from "@/controller/FileController";
 import store from "@/store/index";
-import Node from "@/entities/Node";
 import Output from "@/entities/Editor/Output";
 
 export default class Editor {

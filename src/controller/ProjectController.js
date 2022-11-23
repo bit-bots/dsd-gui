@@ -2,7 +2,7 @@ import TreeElement from "../entities/TreeElement";
 import { TREE_TYPE } from "@/enumerates/TreeType";
 import ProjectConfiguration from "../entities/ProjectConfiguration";
 import Tab from "../entities/Tab";
-import Utils, { LINE_SPLIT_REGEX } from "../utils/Utils";
+import Utils from "../utils/Utils";
 import FileController from "./FileController";
 import ProjectTreeHandler from "@/utils/ProjectTreeHandler";
 import store from "@/store";
@@ -107,9 +107,9 @@ export default class ProjectController {
     this.tabs = [];
     this.selectedTab = undefined;
     this.projectTree = this.projectTreeHandler.loadProjectTree();
-    const dsdFile = this.projectTree.filter(
-      (o) => o.name === store.state.projectConfiguration.dsdFileName
-    )[0];
+    // const dsdFile = this.projectTree.filter(
+    // (o) => o.name === store.state.projectConfiguration.dsdFileName
+    // )[0];
     //this.openTab(dsdFile, true)
   }
 
@@ -136,9 +136,9 @@ export default class ProjectController {
       const treeElement = this.getTreeElementByElement(element);
       treeElement.object = element;
     } else {
-      const dsdFile = this.projectTree.filter(
-        (o) => o.name === store.state.projectConfiguration.dsdFileName
-      )[0];
+      // const dsdFile = this.projectTree.filter(
+      // (o) => o.name === store.state.projectConfiguration.dsdFileName
+      // )[0];
     }
   }
 

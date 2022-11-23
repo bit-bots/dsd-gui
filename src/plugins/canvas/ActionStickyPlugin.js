@@ -1,4 +1,3 @@
-import { ELEMENT_TYPE } from "../../enumerates/ElementType";
 import EditorUtils from "./EditorUtils";
 import HistoryStateElement from "../../entities/HistoryStateElement";
 

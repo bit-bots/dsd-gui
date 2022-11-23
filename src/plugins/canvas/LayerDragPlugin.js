@@ -20,7 +20,7 @@ export default class LayerDragPlugin {
       }
     });
     // redraw the Layer
-    stage.on("mousemove", function (e) {
+    stage.on("mousemove", function () {
       if (!self._stageMoving) {
         return;
       }
@@ -40,7 +40,7 @@ export default class LayerDragPlugin {
       stage.batchDraw();
     });
     // stop layer dragging
-    stage.on("mouseup", function (e) {
+    stage.on("mouseup", function () {
       if (self._stageMoving) {
         self._stageMoving = false;
         if (self._enabledDragMode) {

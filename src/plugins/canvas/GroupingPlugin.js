@@ -77,7 +77,7 @@ export default class GroupingPlugin {
     });
 
     // update the rect on mouse move - note use of 'mode' var to avoid drawing after mouse released.
-    stage.on("mousemove", function (e) {
+    stage.on("mousemove", function () {
       if (!isSelecting) {
         return;
       }
@@ -230,7 +230,7 @@ export default class GroupingPlugin {
       redoUndo: true,
     });
   }
-  setHistorySelect(attrs, firstUndo) {
+  setHistorySelect(attrs) {
     // eslint-disable-next-line @typescript-eslint/no-this-alias
     const self = this;
     const nodes = [];

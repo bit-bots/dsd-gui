@@ -17,7 +17,7 @@ export default class DSDInitializer {
     this._konvaEditor = konvaEditor;
   }
 
-  initializeWithoutExistingConfig(dsdFile, identifier, name) {
+  initializeWithoutExistingConfig(dsdFile, identifier) {
     const dsdFileContent = FileController.loadFile(dsdFile.path);
     const dsdParser = new DSDParser();
     const response = dsdParser.parseDsd(dsdFileContent, identifier);

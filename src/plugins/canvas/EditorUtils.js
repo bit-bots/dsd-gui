@@ -3,9 +3,8 @@ import Node from "../../entities/Node";
 export default class EditorUtils {
   static uuidv1() {
     return "xxxxxxxx".replace(/[xy]/g, function (c) {
-      // eslint-disable-next-line prefer-const
-      let r = (Math.random() * 16) | 0,
-        v = c == "x" ? r : (r & 0x3) | 0x8;
+      const r = (Math.random() * 16) | 0;
+      const v = c == "x" ? r : (r & 0x3) | 0x8;
       return v.toString(16);
     });
   }

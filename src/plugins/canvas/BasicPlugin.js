@@ -1,5 +1,4 @@
 import EditorUtils from "./EditorUtils";
-import Connection from "../../entities/Editor/Connection";
 
 export default class BasicPlugin {
   constructor(stage, layer) {

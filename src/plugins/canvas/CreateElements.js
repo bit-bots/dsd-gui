@@ -106,7 +106,7 @@ export default class CreateElements {
     rect.height(group.height());
     return group;
   }
-  static createSubtree(element, attributes) {
+  static createSubtree(element) {
     const group = CreateElements.createContainerGroup(element);
     const rect = new Konva.Rect({
       fill: this.accentColor(),
