@@ -42,6 +42,7 @@
     "vuex": "^3.6.2"
   },
   "devDependencies": {
+    "@tsconfig/node16": "^1.0.3",
     "@types/electron-devtools-installer": "^2.2.0",
     "@typescript-eslint/eslint-plugin": "^5.43.0",
     "@typescript-eslint/parser": "^5.43.0",

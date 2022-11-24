@@ -1,32 +1,18 @@
 {
+  "extends": "@tsconfig/node16/tsconfig.json",
   "compilerOptions": {
     "allowJs": true,
-    "target": "esnext",
-    "module": "esnext",
-    "strict": true,
-    "jsx": "preserve",
-    "importHelpers": true,
-    "moduleResolution": "node",
-    "experimentalDecorators": true,
-    "skipLibCheck": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
     "sourceMap": true,
     "baseUrl": ".",
-    "types": [
-      "webpack-env"
-    ],
     "paths": {
       "@/*": [
         "src/*"
       ]
     },
     "lib": [
-      "esnext",
+      "es2021",
       "dom",
-      "dom.iterable",
-      "scripthost",
-      "es6"
+      "dom.iterable"
     ]
   },
   "include": [
@@ -35,8 +21,5 @@
     "src/**/*.vue",
     "tests/**/*.ts",
     "tests/**/*.tsx"
-  ],
-  "exclude": [
-    "node_modules"
   ]
 }
