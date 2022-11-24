@@ -1,7 +1,13 @@
+import path from "path";
+import { app, App, BrowserWindow, ipcMain, protocol } from "electron";
 import Store from "electron-store";
-import { app, BrowserWindow, protocol, App } from "electron";
 import installExtension, { VUEJS_DEVTOOLS } from "electron-devtools-installer";
 import { createProtocol } from "vue-cli-plugin-electron-builder/lib";
+import { MenuBuilder, MenuTemplateItem } from "./electron/Menu";
+// @TODO: create pull request for custom code to not be required due to
+// https://github.com/AlexTorresSk/custom-electron-titlebar/issues/188
+// or drop dependency all together as we could use the default menubar
+import { attachTitlebarToWindow, setupTitlebar } from "./patches/index";
 
 const isDevelopment = process.env.NODE_ENV !== "production";
 const isNodeIntegrated = Boolean(process.env.ELECTRON_NODE_INTEGRATION);
@@ -12,7 +18,22 @@ protocol.registerSchemesAsPrivileged([
   { scheme: "app", privileges: { secure: true, standard: true } },
 ]);
 
+setupTitlebar();
 registerAppEventHandlers(app);
+
+function setupMenu(browserWindow: BrowserWindow) {
+  const menuBuilder = new MenuBuilder(browserWindow);
+
+  ipcMain.handle("menu.buildFromTemplate", (_, menuTemplate: MenuTemplateItem[]) => {
+    try {
+      menuBuilder.buildFromTemplate(menuTemplate).setApplicationMenu();
+    } catch (e) {
+      console.error(e);
+    }
+  });
+
+  attachTitlebarToWindow(browserWindow);
+}
 
 async function renderApp(browserWindow: BrowserWindow) {
   if (process.env.WEBPACK_DEV_SERVER_URL) {
@@ -36,9 +57,11 @@ async function createWindow() {
       // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
       nodeIntegration: isNodeIntegrated,
       contextIsolation: !isNodeIntegrated,
+      preload: path.join(__dirname, "preload.js"),
     },
   });
 
+  setupMenu(browserWindow);
   await renderApp(browserWindow);
 }
 

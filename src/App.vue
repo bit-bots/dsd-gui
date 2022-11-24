@@ -58,8 +58,10 @@ export default Vue.extend({
   },
 });
 </script>
+
 <style>
 @import "./assets/titlebar.css";
+
 *:focus {
   outline: none;
 }

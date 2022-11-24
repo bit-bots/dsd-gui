@@ -1,13 +1,12 @@
 module.exports = {
-    pluginOptions: {
-        electronBuilder: {
-            builderOptions: {
-                productName: 'DSDUI',
-            },
-            nodeIntegration: true
-        }
+  pluginOptions: {
+    electronBuilder: {
+      preload: "src/preload.js",
+      builderOptions: {
+        productName: "DSDUI",
+      },
+      nodeIntegration: true,
     },
-  transpileDependencies: [
-    'vuetify'
-  ]
-}
+  },
+  transpileDependencies: ["vuetify"],
+};

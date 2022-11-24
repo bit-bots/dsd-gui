@@ -1,8 +1,7 @@
-import CacheController from "@/controller/CacheController";
 import { Color } from "custom-electron-titlebar";
+import CacheController from "@/controller/CacheController";
 import File from "@/entities/File";
-const customTitlebar = require("custom-electron-titlebar");
-const remote = require("electron").remote;
+import { UIEvent } from "@/entities/Events";
 
 export default {
   data: () => ({
@@ -23,35 +22,19 @@ export default {
   },
   methods: {
     initializeTitleBar() {
+      this.initializeTitleMenu();
       window.addEventListener("DOMContentLoaded", () => {
-        this.titlebar = new customTitlebar.Titlebar({
-          backgroundColor: customTitlebar.Color.fromHex(
-            this.$vuetify.theme.currentTheme.primary.toString()
-          ),
-          icon: require("@/assets/logo.png"),
-        });
-        this.titlebar.setHorizontalAlignment("center");
-        this.initializeTitleMenu();
         this.updateColor();
-
-        const replaceText = (selector, text) => {
-          const element = document.getElementById(selector);
-          if (element) element.innerText = text;
-        };
-
-        for (const type of ["chrome", "node", "electron"]) {
-          replaceText(`${type}-version`, process.versions[type]);
-        }
       });
     },
     updateTitleBar(title) {
-      if (this.titlebar) {
-        this.titlebar.updateTitle(title);
+      if (window.titlebar) {
+        window.titlebar.updateTitle(title);
       }
     },
     updateColor() {
-      if (this.titlebar) {
-        this.titlebar.updateBackground(
+      if (window.titlebar) {
+        window.titlebar.updateBackground(
           Color.fromHex(
             this.$store.state.theme.darkMode
               ? this.$vuetify.theme.themes.dark.primary
@@ -71,7 +54,7 @@ export default {
       const fileTemplate = [
         {
           label: "Open Project",
-          click: () => this.$eventHub.$emit("OPEN_PROJECT"),
+          event: UIEvent.OPEN_PROJECT,
         },
         {
           label: "Recent Projects",
@@ -82,28 +65,28 @@ export default {
             },
             {
               label: "Other",
-              click: () => this.$eventHub.$emit("OPEN_PROJECT"),
+              event: UIEvent.OPEN_PROJECT,
             },
           ],
         },
         {
           label: "Close Project",
-          click: () => this.$eventHub.$emit("CLOSE_PROJECT"),
+          event: UIEvent.closeProject,
         },
         { type: "separator" },
         {
           label: "Save All",
           accelerator: "Crtl + S",
-          click: () => this.$eventHub.$emit("SAVE_ALL"),
+          event: UIEvent.SAVE_ALL,
         },
         {
           label: "Reload From Disk",
-          click: () => location.reload(),
+          event: UIEvent.RELOAD_FROM_DISK,
         },
         { type: "separator" },
         {
           label: "Settings",
-          click: () => this.$eventHub.$emit("OPEN_SETTINGS"),
+          event: UIEvent.OPEN_SETTINGS,
         },
         { type: "separator" },
         isMac ? { role: "close" } : { role: "quit" },
@@ -112,67 +95,67 @@ export default {
         {
           label: "Redo",
           accelerator: "Crtl + Shift + Z",
-          click: () => this.$eventHub.$emit("REDO"),
+          event: UIEvent.REDO,
         },
         {
           label: "Undo",
           accelerator: "Crtl + Z",
-          click: () => this.$eventHub.$emit("UNDO"),
+          event: UIEvent.UNDO,
         },
         { type: "separator" },
         {
           label: "Cut",
           accelerator: "Crtl + X",
-          click: () => this.$eventHub.$emit("CUT"),
+          event: UIEvent.CUT,
         },
         {
           label: "Copy",
           accelerator: "Crtl + C",
-          click: () => this.$eventHub.$emit("COPY"),
+          event: UIEvent.COPY,
         },
         {
           label: "Paste",
           accelerator: "Crtl + V",
-          click: () => this.$eventHub.$emit("PASTE"),
+          event: UIEvent.PASTE,
         },
         { type: "separator" },
         {
           label: "Delete",
           accelerator: "Entf",
-          click: () => this.$eventHub.$emit("DELETE"),
+          event: UIEvent.DELETE,
         },
         { type: "separator" },
         {
           label: "Search Element",
           accelerator: "Crtl + F",
-          click: () => this.$eventHub.$emit("SEARCH_ELEMENT"),
+          event: UIEvent.SEARCH_ELEMENT,
         },
       ];
       const ViewTemplate = [
         {
           label: "Zoom In",
           accelerator: "mouse wheel up",
-          click: () => this.$eventHub.$emit("ZOOM_IN"),
+          event: UIEvent.ZOOM_IN,
         },
         {
           label: "Zoom Out",
           accelerator: "mouse wheel down",
-          click: () => this.$eventHub.$emit("ZOOM_OUT"),
+          event: UIEvent.ZOOM_OUT,
         },
         {
           label: "Toggle Drag",
           accelerator: "mouse wheel pressed",
-          click: () => this.$eventHub.$emit("TOGGLE_DRAG"),
+          event: UIEvent.TOGGLE_DRAG,
         },
         { type: "separator" },
         {
           label: "Restructure",
           accelerator: "Crtl + D",
-          click: () => this.$eventHub.$emit("RESTRUCTURE"),
+          event: UIEvent.RESTRUCTURE,
         },
         {
           label: "Reload from DSD-File",
-          click: () => this.$eventHub.$emit("RELOAD_FROM_FILE"),
+          event: UIEvent.RELOAD_FROM_FILE,
         },
       ];
       const template = [
@@ -189,8 +172,8 @@ export default {
           submenu: ViewTemplate,
         },
       ];
-      const menu = remote.Menu.buildFromTemplate(template);
-      this.titlebar.updateMenu(menu);
+
+      window.electronMenu.buildFromTemplate(template);
     },
   },
 };
