@@ -1,13 +1,13 @@
 <template>
   <v-layout style="height: 100%; width: 100%; display: flex; flex-direction: column">
-    <actionbar
+    <action-bar
       :projectViewSize="projectViewSize"
       :editor-ref="editorRef"
       :file-view="showFileView"
       :code-mirror-ref="codeMirrorRef"
       :project-controller-ref="projectControllerRef"
       @save="save"
-    ></actionbar>
+    ></action-bar>
     <rs-panes
       split-to="columns"
       :allow-resize="true"
@@ -34,12 +34,12 @@
 <script>
 import ResSplitPane from "vue-resize-split-pane";
 import CenterStage from "@/components/CenterStage";
-import Actionbar from "@/components/Actionbar";
+import ActionBar from "@/components/Actionbar";
 import ProjectTree from "@/components/ProjectTree";
 import ProjectController from "@/controller/ProjectController";
 export default {
   name: "ProjectView",
-  components: { ProjectTree, Actionbar, CenterStage, "rs-panes": ResSplitPane },
+  components: { ProjectTree, ActionBar, CenterStage, "rs-panes": ResSplitPane },
   data: () => ({
     projectViewSize: 350,
     editorRef: undefined,

@@ -48,7 +48,7 @@ import FileController from "@/controller/FileController";
 import DSDInitializer from "@/utils/DSDInitializer";
 
 export default {
-  name: "Editor",
+  name: "DsdEditor",
   components: { PropertiesDialog, ContextMenu },
   props: {
     projectControllerRef: Object,
@@ -80,27 +80,25 @@ export default {
     },
   },
   mounted() {
-    // eslint-disable-next-line @typescript-eslint/no-this-alias
-    const self = this;
     this.loading = true;
     window.addEventListener("resize", () => {
-      self.resize();
+      this.resize();
     });
     document.addEventListener("contextmenu", function (evt) {
       if (evt.target && evt.target.id === "canvas") {
         return;
       }
-      self.showContextMenu = false;
+      this.showContextMenu = false;
     });
     setTimeout(() => {
-      self.konvaEditor = new Editor("container" + self.instance.key, self.scaleBy);
-      self.konvaEditor.setElementInstance(CreateElements);
-      self.konvaEditor.setUpdateCallback(
-        self.projectControllerRef.updateElement.bind(self.projectControllerRef)
+      this.konvaEditor = new Editor("container" + this.instance.key, this.scaleBy);
+      this.konvaEditor.setElementInstance(CreateElements);
+      this.konvaEditor.setUpdateCallback(
+        this.projectControllerRef.updateElement.bind(this.projectControllerRef)
       );
-      self.konvaEditor.getLayer().getCanvas()._canvas.id = "canvas";
-      self.konvaEditor.setReloadFunction(this.reload);
-      self.$emit("ref", { key: this.instance.key, ref: this.konvaEditor });
+      this.konvaEditor.getLayer().getCanvas()._canvas.id = "canvas";
+      this.konvaEditor.setReloadFunction(this.reload);
+      this.$emit("ref", { key: this.instance.key, ref: this.konvaEditor });
       const dimension = {
         width: this.$refs.editorContainer.clientWidth,
         height: this.$refs.editorContainer.clientHeight,
@@ -108,16 +106,16 @@ export default {
       this.dimension = dimension;
       this.konvaEditor.setAttr("width", this.$refs.editorContainer.clientWidth);
       this.konvaEditor.setAttr("height", this.$refs.editorContainer.clientHeight);
-      self.konvaEditor.getStage().on("contextmenu", function (e) {
+      this.konvaEditor.getStage().on("contextmenu", function (e) {
         e.evt.preventDefault();
-        const containerRect = self.konvaEditor.getStage().container().getBoundingClientRect();
-        const y = containerRect.top + self.konvaEditor.getStage().getPointerPosition().y + 32;
-        const x = containerRect.left + self.konvaEditor.getStage().getPointerPosition().x + 4;
-        self.openContextMenu({ x, y });
+        const containerRect = this.konvaEditor.getStage().container().getBoundingClientRect();
+        const y = containerRect.top + this.konvaEditor.getStage().getPointerPosition().y + 32;
+        const x = containerRect.left + this.konvaEditor.getStage().getPointerPosition().x + 4;
+        this.openContextMenu({ x, y });
       });
-      self.konvaEditor.getStage().on("dblclick dbltap", function (e) {
+      this.konvaEditor.getStage().on("dblclick dbltap", function (e) {
         if (e.evt.button === 0 && e.evt.detail === 2) {
-          self.handleDbClick(e.target.getParent());
+          this.handleDbClick(e.target.getParent());
         }
       });
       this.initializeLayer();

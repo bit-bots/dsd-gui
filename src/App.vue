@@ -12,28 +12,23 @@ import CustomTitlebar from "@/mixins/CustomTitlebar";
 import ProjectConfigurationLocal from "@/entities/ProjectConfigurationLocal";
 import File from "@/entities/File";
 export default Vue.extend({
-  name: "App",
+  name: "DsdGui",
   mixins: [CustomTitlebar],
   data: () => ({
     height: 570,
     titleBarHeight: 30,
   }),
   mounted() {
-    // eslint-disable-next-line @typescript-eslint/no-this-alias
-    const self = this;
-    // @ts-ignore
-    self.initializeTitleBar();
+    this.initializeTitleBar();
     window.addEventListener("resize", () => {
-      self.resize();
+      this.resize();
     });
-    self.resize();
-    if (this.projectConfigurationLocal) {
-      // @ts-ignore
+    this.resize();
+    if (this.projectConfigurationLocal?.path) {
       this.updateTitleBar(File.getFileName(this.projectConfigurationLocal.path));
       this.$router.push({ name: "ProjectView" });
     } else {
       this.$router.push({ name: "WelcomeView" });
-      // @ts-ignore
       this.updateTitleBar("Welcome");
     }
   },
@@ -47,10 +42,8 @@ export default Vue.extend({
       handler() {
         if (this.projectConfigurationLocal) {
           this.$router.push({ name: "ProjectView" });
-          // @ts-ignore
           this.updateTitleBar(File.getFileName(this.projectConfigurationLocal.path));
         } else {
-          // @ts-ignore
           this.updateTitleBar("Welcome");
           this.$router.push({ name: "WelcomeView" });
         }

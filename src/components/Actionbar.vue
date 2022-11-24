@@ -155,8 +155,9 @@
 <script>
 import SettingsDialog from "@/components/dialogs/settings/SettingsDialog";
 import OpenProjectDialog from "@/components/dialogs/OpenProjectDialog";
+
 export default {
-  name: "Actionbar",
+  name: "ActionBar",
   components: { OpenProjectDialog, SettingsDialog },
   props: {
     projectViewSize: Number,
