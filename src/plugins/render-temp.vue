@@ -1,19 +1,19 @@
 <script>
 export default {
-  name: 'render-temp',
+  name: "render-temp",
   props: {
     render: {
       type: Function,
       // eslint-disable-next-line @typescript-eslint/no-empty-function
-      default: () => {}
+      default: () => {},
     },
     params: {
       type: Object,
-      default: () => ({})
-    }
+      default: () => ({}),
+    },
   },
-  render (h) {
-    return this.render && this.render(h, { ...this.params })
-  }
-}
+  render(h) {
+    return this.render && this.render(h, { ...this.params });
+  },
+};
 </script>
