@@ -1,5 +1,5 @@
 import path from "path";
-import { app, App, BrowserWindow, ipcMain, protocol } from "electron";
+import { app, App, BrowserWindow, dialog, ipcMain, protocol } from "electron";
 import Store from "electron-store";
 import installExtension, { VUEJS_DEVTOOLS } from "electron-devtools-installer";
 import { createProtocol } from "vue-cli-plugin-electron-builder/lib";
@@ -47,6 +47,12 @@ async function renderApp(browserWindow: BrowserWindow) {
   }
 }
 
+function registerMainProcessEventHandlers(browserWindow: BrowserWindow) {
+  ipcMain.handle("dialog.open", (_, options) => {
+    return dialog.showOpenDialog(browserWindow, options);
+  });
+}
+
 async function createWindow() {
   const browserWindow = new BrowserWindow({
     width: 1200,
@@ -62,6 +68,7 @@ async function createWindow() {
   });
 
   setupMenu(browserWindow);
+  registerMainProcessEventHandlers(browserWindow);
   await renderApp(browserWindow);
 }
 

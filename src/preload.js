@@ -18,6 +18,13 @@ const electronMenu = {
   buildFromTemplate: async (template) => ipcRenderer.invoke("menu.buildFromTemplate", template),
 };
 
-const integrations = { electronMenu };
+const electronDialog = {
+  open: async (options) => ipcRenderer.invoke("dialog.open", options),
+};
+
+const integrations = {
+  electronMenu,
+  electronDialog,
+};
 
 Object.assign(window, integrations);

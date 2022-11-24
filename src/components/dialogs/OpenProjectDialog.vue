@@ -183,7 +183,12 @@ import ProjectConfiguration from "@/entities/ProjectConfiguration";
 import ProjectConfigurationLocal from "@/entities/ProjectConfigurationLocal";
 import CacheController from "@/controller/CacheController";
 import UUIDv4Generator from "@/utils/UUIDv4Generator";
-const { remote } = require("electron");
+
+export const DIALOG_OPTIONS = {
+  fileDialog: { properties: ["openFile"] },
+  dirDialog: { properties: ["openDirectory"] },
+};
+
 export default {
   name: "OpenProjectDialog",
   components: { ParentDialog },
@@ -236,39 +241,24 @@ export default {
     loadProject(projectConfigurationLocal) {
       this.$store.commit("loadProject", { projectConfigurationLocal });
     },
-    openBlackBoardDialog() {
-      this.error = false;
-      const WIN = remote.getCurrentWindow();
-      const directoryOptions = {
-        properties: ["openDirectory"],
-      };
-      const fileOptions = {
-        properties: ["openFile"],
-      };
-      const callback = remote.dialog.showOpenDialog(
-        WIN,
-        this.blackBoardType === "File" ? fileOptions : directoryOptions
-      );
-      callback.then((response) => {
-        if (!response.canceled) {
-          this.blackBoardPath = response.filePaths[0];
-        }
-      });
+    async openBlackBoardDialog() {
+      const dialogOptions =
+        this.blackBoardType === "File" ? DIALOG_OPTIONS.fileDialog : DIALOG_OPTIONS.dirDialog;
+
+      const { canceled, filePaths } = await window.electronDialog.open(dialogOptions);
+      if (!canceled) {
+        this.blackBoardPath = filePaths[0];
+      }
     },
-    openDirectoryDialog() {
-      const WIN = remote.getCurrentWindow();
-      const options = {
-        properties: ["openDirectory"],
-      };
-      const callback = remote.dialog.showOpenDialog(WIN, options);
-      callback.then((response) => {
-        if (!response.canceled) {
-          this.projectDirectory = response.filePaths[0];
-          this.checkProjectDirectory();
-        } else {
-          this.resetDialog();
-        }
-      });
+    async openDirectoryDialog() {
+      const { canceled, filePaths } = await window.electronDialog.open(DIALOG_OPTIONS.dirDialog);
+
+      if (!canceled) {
+        this.projectDirectory = filePaths[0];
+        this.checkProjectDirectory();
+      } else {
+        this.resetDialog();
+      }
     },
     resetDialog() {
       this.selectedBehaviorModule = undefined;
