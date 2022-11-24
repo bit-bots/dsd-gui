@@ -13,10 +13,7 @@ export default class RestructurePlugin {
   setNewElementPosition(element, corrdiantes) {
     let height = 0;
     element.position(corrdiantes);
-    const outputnames = element
-      .find("." + "output")
-      .toArray()
-      .map((output) => output.id());
+    const outputnames = element.find("." + "output").map((output) => output.id());
     if (outputnames) {
       for (let i = 0; i < outputnames.length; i++) {
         const followingElement = this.getFollowingElement(element, outputnames[i]);
