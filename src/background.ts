@@ -58,6 +58,7 @@ async function createWindow() {
     width: 1200,
     height: 800,
     frame: false,
+    icon: path.join(__dirname, "../public/img/logo.png"),
     webPreferences: {
       // Use pluginOptions.nodeIntegration, leave this alone
       // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
