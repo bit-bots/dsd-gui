@@ -1,8 +1,8 @@
 .titlebar {
-    font-size: 13px !important;
-    font-family: Arial, Helvetica, sans-serif !important;
-    height: 30px !important;
-    padding-top: 3px !important;
+  font-size: 13px !important;
+  font-family: Arial, Helvetica, sans-serif !important;
+  height: 30px !important;
+  padding-top: 3px !important;
 }
 /*.menubar-menu-container {*/
 /*    background-color: var(--v-primary-base) !important;*/
@@ -21,6 +21,6 @@
 /*    margin-left: 30px !important;*/
 /*}*/
 
-.container-after-titlebar{
-    overflow: hidden !important;
+.container-after-titlebar {
+  overflow: hidden !important;
 }
