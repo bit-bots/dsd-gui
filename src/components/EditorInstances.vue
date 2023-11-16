@@ -1,7 +1,7 @@
 <template>
   <div style="width: 100%; height: 100%; background-color: var(--v-darkPrimary-base)">
     <template v-for="instance in openInstances">
-      <editor
+      <dsd-editor
         @error="$emit('error', $event)"
         :project-controller-ref="projectControllerRef"
         @saveProperties="saveProperties"
@@ -9,18 +9,18 @@
         :key="instance.key"
         @ref="saveRef"
         v-bind:class="instance.key === selectedInstance.key ? 'show' : 'hide'"
-      ></editor>
+      ></dsd-editor>
     </template>
   </div>
 </template>
 
 <script>
-import Editor from "./Editor";
+import DsdEditor from "./Editor";
 import { ELEMENT_TYPE } from "@/enumerates/ElementType";
 import DSDParser from "@/utils/DSDParser";
 export default {
   name: "EditorInstances",
-  components: { Editor },
+  components: { DsdEditor },
   props: {
     projectControllerRef: Object,
     showVirtuellRoom: Boolean,

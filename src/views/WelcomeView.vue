@@ -28,7 +28,7 @@
         class="welcomeScreen justify-center align-center"
       >
         <v-card style="width: 50%" :dark="$store.state.theme.darkMode" class="card">
-          <v-card-title class="pa-2"> Getting started </v-card-title>
+          <v-card-title class="pa-2">Getting started</v-card-title>
           <v-divider></v-divider>
           <v-card-text class="text-center">
             <v-btn @click="open" color="accent">

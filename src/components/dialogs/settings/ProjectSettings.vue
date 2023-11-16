@@ -158,7 +158,8 @@
 import CacheController from "@/controller/CacheController";
 import File from "@/entities/File";
 import FileController from "@/controller/FileController";
-const { remote } = require("electron");
+import { DIALOG_OPTIONS } from "@/components/dialogs/OpenProjectDialog";
+
 export default {
   name: "ProjectSettings",
   props: {
@@ -211,24 +212,16 @@ export default {
     },
   },
   methods: {
-    openBlackBoardDialog() {
+    // @TODO: combine with OpenProjectDialog
+    async openBlackBoardDialog() {
       this.error = false;
-      const WIN = remote.getCurrentWindow();
-      const directoryOptions = {
-        properties: ["openDirectory"],
-      };
-      const fileOptions = {
-        properties: ["openFile"],
-      };
-      const callback = remote.dialog.showOpenDialog(
-        WIN,
-        this.blackBoardType === "File" ? fileOptions : directoryOptions
-      );
-      callback.then((response) => {
-        if (!response.canceled) {
-          this.blackBoardPath = response.filePaths[0];
-        }
-      });
+      const dialogOptions =
+        this.blackBoardType === "File" ? DIALOG_OPTIONS.fileDialog : DIALOG_OPTIONS.dirDialog;
+
+      const { canceled, filePaths } = await window.electronDialog.open(dialogOptions);
+      if (!canceled) {
+        this.blackBoardPath = filePaths[0];
+      }
     },
     removeAllLocalConfigurations() {
       this.$store.commit("resetGraphConfig");

@@ -49,9 +49,11 @@
               <span class="ml-2 mr-5 flex-grow-1">
                 {{ item.name }}
               </span>
-              <v-icon v-if="item.childs" small color="primaryText"> mdi-chevron-right </v-icon>
-              <template v-else-if="item.accelerator" class="text-caption">
-                {{ item.accelerator }}
+              <v-icon v-if="item.childs" small color="primaryText">mdi-chevron-right</v-icon>
+              <template v-else-if="item.accelerator">
+                <div class="text-caption">
+                  {{ item.accelerator }}
+                </div>
               </template>
             </div>
           </v-hover>

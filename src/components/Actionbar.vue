@@ -153,10 +153,13 @@
 </template>
 
 <script>
+import { ipcRenderer } from "electron";
+import { UIEvent } from "@/entities/Events";
 import SettingsDialog from "@/components/dialogs/settings/SettingsDialog";
 import OpenProjectDialog from "@/components/dialogs/OpenProjectDialog";
+
 export default {
-  name: "Actionbar",
+  name: "ActionBar",
   components: { OpenProjectDialog, SettingsDialog },
   props: {
     projectViewSize: Number,
@@ -166,23 +169,23 @@ export default {
     projectControllerRef: Object,
   },
   mounted() {
-    this.$eventHub.$on("CLOSE_PROJECT", () => this.closeProject());
-    this.$eventHub.$on("OPEN_SETTINGS", () => this.openSettingsDialog());
-    this.$eventHub.$on("SAVE_ALL", () => this.save());
-    this.$eventHub.$on("OPEN_PROJECT", () => {
-      this.showOpenProjectDialog = true;
-    });
-    this.$eventHub.$on("REDO", () => this.redo());
-    this.$eventHub.$on("UNDO", () => this.undo());
-    this.$eventHub.$on("COPY", () => this.copy());
-    this.$eventHub.$on("CUT", () => this.cut());
-    this.$eventHub.$on("PASTE", () => this.paste());
-    this.$eventHub.$on("DELETE", () => this.delet());
-    this.$eventHub.$on("ZOOM_IN", () => this.zoomIn());
-    this.$eventHub.$on("ZOOM_OUT", () => this.zoomOut());
-    this.$eventHub.$on("TOGGLE_DRAG", () => this.toggleDrag());
-    this.$eventHub.$on("RESTRUCTURE", () => this.restructure());
-    this.$eventHub.$on("RELOAD_FROM_FILE", () => this.reloadFromFile());
+    ipcRenderer.on(UIEvent.CLOSE_PROJECT, () => this.closeProject());
+    ipcRenderer.on(UIEvent.OPEN_SETTINGS, () => this.openSettingsDialog());
+    ipcRenderer.on(UIEvent.SAVE_ALL, () => this.save());
+    ipcRenderer.on(UIEvent.OPEN_PROJECT, () => (this.showOpenProjectDialog = true));
+    ipcRenderer.on(UIEvent.REDO, () => this.redo());
+    ipcRenderer.on(UIEvent.UNDO, () => this.undo());
+    ipcRenderer.on(UIEvent.COPY, () => this.copy());
+    ipcRenderer.on(UIEvent.CUT, () => this.cut());
+    ipcRenderer.on(UIEvent.PASTE, () => this.paste());
+    ipcRenderer.on(UIEvent.DELETE, () => this.delete());
+    ipcRenderer.on(UIEvent.ZOOM_IN, () => this.zoomIn());
+    ipcRenderer.on(UIEvent.ZOOM_OUT, () => this.zoomOut());
+    ipcRenderer.on(UIEvent.TOGGLE_DRAG, () => this.toggleDrag());
+    ipcRenderer.on(UIEvent.RESTRUCTURE, () => this.restructure());
+    ipcRenderer.on(UIEvent.RELOAD_FROM_FILE, () => this.reloadFromFile());
+    ipcRenderer.on(UIEvent.RELOAD_FROM_DISK, () => this.reloadFromDisk());
+
     // eslint-disable-next-line @typescript-eslint/no-this-alias
     const self = this;
     document.addEventListener("keydown", function (e) {
@@ -207,10 +210,7 @@ export default {
     },
     saveAndReloadProject() {
       this.save();
-      this.reload();
-    },
-    reload() {
-      location.reload();
+      this.reloadFromDisk();
     },
     canRedo() {
       if (this.fileView) {
@@ -249,7 +249,7 @@ export default {
     cut() {
       this.editorRef.cut();
     },
-    delet() {
+    delete() {
       this.editorRef.remove();
     },
     zoomIn() {
@@ -266,6 +266,9 @@ export default {
     },
     reloadFromFile() {
       this.editorRef.reloadFromFile();
+    },
+    reloadFromDisk() {
+      this.$router.go();
     },
     closeProject() {
       this.$store.commit("closeProject");

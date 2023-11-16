@@ -5,30 +5,32 @@ import ProjectController from "@/controller/ProjectController";
 
 Vue.use(Vuex);
 
+interface ProjectConfiguration {
+  graphConfig: Record<string, unknown>;
+}
+
 export default new Vuex.Store({
   state: {
-    projectConfigurationLocal: undefined,
-    projectConfiguration: undefined,
+    projectConfiguration: {
+      graphConfig: {},
+    } as ProjectConfiguration,
+    projectConfigurationLocal: {},
     theme: {
       darkMode: false,
     },
   },
   mutations: {
     resetGraphConfig(state) {
-      // @ts-ignore
       state.projectConfiguration.graphConfig = {};
     },
-    resetSingleGraphConfig(state, payload) {
-      // @ts-ignore
+    resetSingleGraphConfig(state, payload: string) {
       state.projectConfiguration.graphConfig[payload] = undefined;
     },
     updateSingleGraphConfig(state, payload) {
-      // @ts-ignore
       state.projectConfiguration.graphConfig[payload.instance] = payload.graphConfig;
     },
     loadProject(state, payload) {
       CacheController.loadProject(payload.projectConfigurationLocal.id);
-      // @ts-ignore
       state.projectConfiguration = ProjectController.getConfig(
         payload.projectConfigurationLocal.path
       );
@@ -41,13 +43,12 @@ export default new Vuex.Store({
     updateGraphConfig(state, payload) {
       const newGraphConfigs = payload.graphConfigs;
       for (const instance in newGraphConfigs) {
-        // @ts-ignore
         state.projectConfiguration.graphConfig[instance] = newGraphConfigs[instance];
       }
     },
     closeProject(state) {
       CacheController.closeProject();
-      state.projectConfigurationLocal = undefined;
+      state.projectConfigurationLocal = {};
     },
     setTheme(state, payload) {
       state.theme = payload;
